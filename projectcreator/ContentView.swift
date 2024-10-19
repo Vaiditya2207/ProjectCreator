@@ -8,17 +8,29 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject var viewModel = MainViewModel()
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        HStack(spacing: 0) {
+            SideBar(model: viewModel)
+                .frame(minWidth: 200)
+                .background(Color.gray.opacity(0.2))
+                .overlay(
+                    Rectangle()
+                        .frame(width: 1)
+                        .foregroundColor(Color.gray.opacity(0.5))
+                        .offset(x: (202 / 2))
+                )
+            
+            HomeView()
+                .frame(maxWidth: .infinity)
         }
-        .padding()
+        .frame(maxHeight: .infinity)
+        .background(Color.gray.opacity(0.1))
     }
 }
 
 #Preview {
     ContentView()
+        .frame(minWidth: 800, minHeight: 600)
 }
