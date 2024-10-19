@@ -22,7 +22,7 @@ struct ContentView: View {
                         .offset(x: (202 / 2))
                 )
             
-            HomeView()
+            HomeView(model: viewModel)
                 .frame(maxWidth: .infinity)
         }
         .frame(maxHeight: .infinity)
