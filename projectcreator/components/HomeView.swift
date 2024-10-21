@@ -2,6 +2,7 @@ import SwiftUI
 
 struct HomeView: View {
     @ObservedObject var model: MainViewModel
+    @StateObject var templateViewModel = TemplateViewModel()
     var body: some View{
         VStack{
             switch model.currentComponent{
@@ -16,7 +17,7 @@ struct HomeView: View {
             case "ProfilePage":
                 ProfilePage(model: model)
             case "TemplateLibrary":
-                TemplateLibrary(model: model)
+                TemplateLibrary(model: model, viewModel: templateViewModel)
             case "PackageManager":
                 PackageManager(model: model)
             default:

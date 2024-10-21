@@ -26,13 +26,104 @@ struct HomePage: View {
                     .animation(.easeInOut(duration: 0.001), value: animatedText) // Smooth animation
             }
             Spacer()
+            HStack {
+                Spacer()
+                Button(action: {
+                    
+                }){
+                    VStack{
+                        Image(systemName: "plus")
+                            .resizable()
+                            .frame(width: 15, height: 15)
+                            .padding(.bottom, 10)
+                        Text("Create Project")
+                    }
+                    .frame(minWidth: 200, minHeight: 110)
+                    .buttonStyle(PlainButtonStyle())
+                }
+                .cornerRadius(20)
+                .shadow(radius: 5)
+                Spacer()
+                Button(action: {
+                    model.currentComponent = "TemplateLibrary"
+                }){
+                    VStack{
+                        Image(systemName: "building.columns")
+                            .resizable()
+                            .frame(width: 16, height: 15)
+                            .padding(.bottom, 10)
+                        Text("Template Library")
+                    }
+                    .frame(minWidth: 200, minHeight: 110)
+                }
+                .cornerRadius(20)
+                .shadow(radius: 5)
+                Spacer()
+            }
+            .padding(.bottom, 15)
+            HStack {
+                Spacer()
+                Button(action: {
+                    model.currentComponent = "PackageManager"
+                }){
+                    VStack{
+                        Image(systemName: "tray")
+                            .resizable()
+                            .frame(width: 22, height: 15)
+                            .padding(.bottom, 10)
+                        Text("Package Manager")
+                    }
+                    .frame(minWidth: 200, minHeight: 110)
+                    .buttonStyle(PlainButtonStyle())
+                }
+                .cornerRadius(20)
+                .shadow(radius: 5)
+                Spacer()
+                Button(action: {
+                    
+                }){
+                    VStack{
+                        Image(systemName: "house.lodge")
+                            .resizable()
+                            .frame(width: 25, height: 15)
+                            .padding(.bottom, 10)
+                        Text("About CodeMelon")
+                    }
+                    .frame(minWidth: 200, minHeight: 110)
+                    .buttonStyle(PlainButtonStyle())
+                }
+                .cornerRadius(20)
+                .shadow(radius: 5)
+                Spacer()
+            }
+            .padding(.bottom, 15)
+            HStack {
+                Spacer()
+                Button(action: {
+                    model.currentComponent = "CreateTemplate"
+                }){
+                    VStack{
+                        Image(systemName: "plus")
+                            .resizable()
+                            .frame(width: 15, height: 15)
+                            .padding(.bottom, 10)
+                        Text("Create Your Own Template")
+                    }
+                    .frame(minWidth: 200, minHeight: 110)
+                    .buttonStyle(PlainButtonStyle())
+                }
+                .cornerRadius(20)
+                .shadow(radius: 5)
+                Spacer()
+            }
+            Spacer()
             HStack{
                 Spacer()
                 Text("Powered By Codemelon")
             }
         }
         .padding(.vertical, 12)
-        .padding(.horizontal, 30)
+        .padding(.horizontal, 10)
         .onAppear {
             startAnimation()
         }
@@ -59,3 +150,4 @@ struct HomePage: View {
     HomePage(model: MainViewModel())
         .frame(minWidth: 600, minHeight: 600)
 }
+

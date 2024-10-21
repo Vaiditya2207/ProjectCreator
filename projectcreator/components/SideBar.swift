@@ -80,7 +80,7 @@ struct SideBar: View {
                     
                     Image(systemName: isLoggedIn ? "person.circle" : "touchid")
                         .frame(width: 20)
-                    Text(isLoggedIn ? "Profile Page" : "Log In")
+                    Text(isLoggedIn ? "Profile Page" : "Log In / Sign Up")
                 }
                 .padding(.horizontal, 5)
             }
