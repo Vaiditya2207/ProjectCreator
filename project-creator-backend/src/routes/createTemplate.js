@@ -33,10 +33,14 @@ const deleteDirectory = (dirPath) => {
 };
 
 const createTemplate = async (req, res) => {
-  console.log(req.body)
   const connection = await pool.getConnection()
   const [result] = await connection.query(`SELECT * FROM templateLibrary WHERE templateName = "${req.body.templateName}" AND templateAuthor = "${req.body.templateAuthor}"`)
-  console.log(result)
+  if (!req.file || !req.body.templateName || !req.body.templateDescription || !req.body.templateAuthor || !req.body.templateType) {
+    return res.status(400).json({
+      message: "All fields are required",
+      error: "All fields are required"
+    });
+  }
   if (result.length != 0) {
     return res.status(400).json({
         message: "Already same template by the user",

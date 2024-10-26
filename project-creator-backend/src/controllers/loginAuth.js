@@ -6,6 +6,12 @@ const isMail = (str) => {
 }
 
 const loginAuth = async (identity, password) => {
+    if (!identity || !password) { 
+        return {
+            status: 400,
+            message: "All fields are required"
+        }
+    }
     const connection = await pool.getConnection();
     try {
         const identityIsMail = isMail(identity);  
@@ -20,7 +26,11 @@ const loginAuth = async (identity, password) => {
         if(status) {
             return {
                 status: 200,
-                message: "Login successful"
+                message: "Login successful",
+                payload: {
+                    username: result[0].username,
+                    email: result[0].email
+                }
             }
         } else {
             return {
