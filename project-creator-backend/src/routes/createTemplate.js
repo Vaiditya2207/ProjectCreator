@@ -29,6 +29,8 @@ const deleteDirectory = (dirPath) => {
 
 const createTemplate = async (req, res) => {
   const connection = await pool.getConnection();
+  const tempExtractPath = path.join(__dirname, 'extracted_temp');
+  const finalExtractPath = path.join(__dirname, 'extracted', `${req.body.templateName}by${req.body.templateAuthor}`);
   try {
     const { templateName, templateDescription, templateAuthor, templateType } = req.body;
     const existingTemplateQuery = `SELECT * FROM templateLibrary WHERE templateName = ? AND templateAuthor = ?`;
@@ -41,8 +43,6 @@ const createTemplate = async (req, res) => {
       return res.status(400).json({ message: "Template with the same name by this author already exists", error: "Duplicate template" });
     }
 
-    const tempExtractPath = path.join(__dirname, 'extracted_temp');
-    const finalExtractPath = path.join(__dirname, 'extracted', `${templateName}by${templateAuthor}`);
     const uploadedFilePath = req.file.path;
 
     // Create necessary directories
@@ -60,7 +60,16 @@ const createTemplate = async (req, res) => {
     // Find and move extracted contents
     const extractedContents = fs.readdirSync(tempExtractPath).filter(file => fs.statSync(path.join(tempExtractPath, file)).isDirectory())[0];
     const contentPath = path.join(tempExtractPath, extractedContents);
-    fs.readdirSync(contentPath).forEach(file => fs.renameSync(path.join(contentPath, file), path.join(finalExtractPath, file)));
+    
+    // Move contents to final destination, but skip .git folder if it exists
+    fs.readdirSync(contentPath).forEach(file => {
+      const sourcePath = path.join(contentPath, file);
+      const destinationPath = path.join(finalExtractPath, file);
+      
+      if (file !== '.git') {
+        fs.renameSync(sourcePath, destinationPath);
+      }
+    });
 
     const repoName = `${templateName}by${templateAuthor}`;
     const repoResponse = await octokit.rest.repos.createInOrg({
@@ -69,11 +78,17 @@ const createTemplate = async (req, res) => {
       private: false,
     });
 
-    const repoUrl = `https://${process.env.GITHUB_KEY}@github.com/TemplateLibraryByCodemelon/${repoName}.git`;
+    const repoUrl = `https://${process.env.GITHUB_TOKEN}@github.com/TemplateLibraryByCodemelon/${repoName}.git`;
     const git = simpleGit(finalExtractPath);
 
     await git.init();
-    await git.addRemote('origin', repoUrl);
+    
+    // Check if remote exists and remove it
+    const remotes = await git.getRemotes();
+    if (!remotes.some(remote => remote.name === 'origin')) {
+      await git.addRemote('origin', repoUrl);
+    }
+    
     await git.add('.');
     await git.commit('Initial commit');
     
