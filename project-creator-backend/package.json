@@ -4,6 +4,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "prestart": "git config --global user.name 'Vaiditya2207' && git config --global user.email 'vaiditya.t23csai@nst.rishihood.edu.in'",
+    "start": "node ./src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
