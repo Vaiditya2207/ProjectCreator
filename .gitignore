@@ -1,2 +1,5 @@
 /project-creator-backend/node_modules
 /project-creator-backend/.env
+/projectcreator.xcodeproj
+/projectcreatorTests
+/projectcreatorUITests
