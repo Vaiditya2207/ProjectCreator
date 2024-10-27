@@ -82,15 +82,17 @@ const createTemplate = async (req, res) => {
       }
     }
 
-    const token = process.env.GITHUB_KEY;
-    if (!token) {
-      return res.status(500).json({ message: 'GitHub token is not defined in environment variables' });
+    const key = process.env.GITHUB_KEY;
+    if (!key) {
+      return res.status(500).json({ message: 'GitHub key is not defined in environment variables' });
     }
 
-    const repoUrl = `https://${token}@github.com/TemplateLibraryByCodemelon/${repoName}.git`;
+    const repoUrl = `https://${key}@github.com/TemplateLibraryByCodemelon/${repoName}.git`;
     const git = simpleGit(finalExtractPath);
 
     await git.init();
+    await git.checkoutLocalBranch('main');  // Ensure 'main' branch is created
+
     const remotes = await git.getRemotes();
     if (remotes.some(remote => remote.name === 'origin')) {
       await git.removeRemote('origin');
