@@ -60,10 +60,14 @@ struct TemplatePage: View {
 
 struct TemplatePage_Previews: PreviewProvider {
     static var previews: some View {
-        TemplatePage(template: Template(name: "Swift UI Starter",
-                                        description: "A comprehensive starter template for SwiftUI projects with basic MVVM structure.",
-                                        author: "John Doe",
-                                        type: "iOS App",
-                                        createdDate: Date()))
+        TemplatePage(template: Template(
+            id: 1, // Provide a unique ID
+            name: "Swift UI Starter",
+            description: "A comprehensive starter template for SwiftUI projects with basic MVVM structure.",
+            author: "John Doe",
+            type: "iOS App",
+            url: "https://github.com/example/swiftui-starter", // Provide a sample URL
+            createdDate: Date()
+        ))
     }
 }
