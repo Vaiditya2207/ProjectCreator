@@ -31,10 +31,13 @@ const deleteDirectory = (dirPath) => {
 const createTemplate = async (req, res) => {
   const connection = await pool.getConnection();
   const tempExtractPath = path.join(__dirname, 'extracted_temp');
+  let finalExtractPath;  // Declare here for access in 'finally' block
   try {
     const { templateName, templateDescription, token, templateType } = req.body;
-    const {username, email} = jwt.decode(token, process.env.JWT_SECRET);
-    const finalExtractPath = path.join(__dirname, 'extracted', `${req.body.templateName}by${username}`);
+    const { username, email } = jwt.decode(token, process.env.JWT_SECRET);
+
+    // Define finalExtractPath after 'username' is available
+    finalExtractPath = path.join(__dirname, 'extracted', `${templateName}by${username}`);
     const existingTemplateQuery = `SELECT * FROM templateLibrary WHERE templateName = ? AND templateAuthor = ?`;
     const [result] = await connection.query(existingTemplateQuery, [templateName, username]);
 
@@ -121,9 +124,10 @@ const createTemplate = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: 'Error creating template', error: error.message });
   } finally {
+    // Cleanup code here
     if (req.file?.path && fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
     if (fs.existsSync(tempExtractPath)) deleteDirectory(tempExtractPath);
-    if (fs.existsSync(finalExtractPath)) deleteDirectory(finalExtractPath);
+    if (finalExtractPath && fs.existsSync(finalExtractPath)) deleteDirectory(finalExtractPath);  // Check for existence
     connection.release();
   }
 };
