@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import simpleGit from 'simple-git';
 import pool from '../db/config.js';
+import jwt from 'jsonwebtoken';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -30,13 +31,14 @@ const deleteDirectory = (dirPath) => {
 const createTemplate = async (req, res) => {
   const connection = await pool.getConnection();
   const tempExtractPath = path.join(__dirname, 'extracted_temp');
-  const finalExtractPath = path.join(__dirname, 'extracted', `${req.body.templateName}by${req.body.templateAuthor}`);
   try {
-    const { templateName, templateDescription, templateAuthor, templateType } = req.body;
+    const { templateName, templateDescription, token, templateType } = req.body;
+    const {username, email} = jwt.decode(token, process.env.JWT_SECRET);
+    const finalExtractPath = path.join(__dirname, 'extracted', `${req.body.templateName}by${username}`);
     const existingTemplateQuery = `SELECT * FROM templateLibrary WHERE templateName = ? AND templateAuthor = ?`;
-    const [result] = await connection.query(existingTemplateQuery, [templateName, templateAuthor]);
+    const [result] = await connection.query(existingTemplateQuery, [templateName, username]);
 
-    if (!req.file || !templateName || !templateDescription || !templateAuthor || !templateType) {
+    if (!req.file || !templateName || !templateDescription || !token || !templateType) {
       return res.status(400).json({ message: "All fields are required", error: "All fields are required" });
     }
     if (result.length > 0) {
@@ -66,7 +68,7 @@ const createTemplate = async (req, res) => {
       });
     }
 
-    const repoName = `${templateName}by${templateAuthor}`;
+    const repoName = `${templateName}by${username}`;
     let repoResponse;
     try {
       repoResponse = await octokit.rest.repos.createInOrg({
@@ -110,7 +112,7 @@ const createTemplate = async (req, res) => {
 
     await connection.query(
       "INSERT INTO templateLibrary (templateName, templateDescription, templateAuthor, templateType, templateUrl) VALUES (?, ?, ?, ?, ?)",
-      [templateName, templateDescription, templateAuthor, templateType, repoResponse.data.html_url]
+      [templateName, templateDescription, username, templateType, repoResponse.data.html_url]
     );
 
     res.status(201).json({ message: 'Template created successfully!', repoUrl: repoResponse.data.html_url });

@@ -1,10 +1,9 @@
 import SwiftUI
 
 struct SideBar: View {
-    @ObservedObject var model: MainViewModel  // Use @ObservedObject here
-    
+    @ObservedObject var model: MainViewModel
+
     var body: some View {
-        var isLoggedIn = model.isLoggedIn
         VStack(alignment: .leading, spacing: 20) {
             Button(action: {
                 model.currentComponent = "HomePage"
@@ -60,6 +59,21 @@ struct SideBar: View {
             
             Spacer()
             
+            if model.isLoggedIn {
+                Button(action: {
+                    model.logout()
+                }) {
+                    HStack(spacing: 5) {
+                        Image(systemName: "rectangle.portrait.and.arrow.right")
+                            .frame(width: 20)
+                        Text("Logout")
+                    }
+                    .padding(.horizontal, 5)
+                }
+                .frame(maxWidth: 170, alignment: .leading)
+                .buttonStyle(PlainButtonStyle())
+            }
+
             Button(action: {
                 model.currentComponent = "AppSettings"
             }) {
@@ -72,15 +86,14 @@ struct SideBar: View {
             }
             .frame(maxWidth: 170, alignment: .leading)
             .buttonStyle(PlainButtonStyle())
-            
+
             Button(action: {
-                model.currentComponent = isLoggedIn ? "ProfilePage": "AuthPage"
+                model.currentComponent = model.isLoggedIn ? "ProfilePage" : "AuthPage"
             }) {
                 HStack(spacing: 5) {
-                    
-                    Image(systemName: isLoggedIn ? "person.circle" : "touchid")
+                    Image(systemName: model.isLoggedIn ? "person.circle" : "touchid")
                         .frame(width: 20)
-                    Text(isLoggedIn ? "Profile Page" : "Log In / Sign Up")
+                    Text(model.isLoggedIn ? "Profile Page" : "Log In / Sign Up")
                 }
                 .padding(.horizontal, 5)
             }
@@ -89,12 +102,8 @@ struct SideBar: View {
         }
         .frame(maxHeight: .infinity)
         .padding(.vertical, 20)
-        .onReceive(model.$isLoggedIn){newValue in
-            isLoggedIn = model.isLoggedIn
-        }
     }
 }
-
 
 #Preview {
     SideBar(model: MainViewModel())

@@ -28,10 +28,14 @@ struct TemplatePage: View {
             HStack {
                 Label(template.author, systemImage: "person")
                 Spacer()
-                Label {
-                    Text(template.createdDate, style: .date)
-                } icon: {
-                    Image(systemName: "calendar")
+                if let date = template.formattedCreatedDate {
+                    Label {
+                        Text(date, style: .date)
+                    } icon: {
+                        Image(systemName: "calendar")
+                    }
+                } else {
+                    Text("Invalid Date")
                 }
             }
             .font(.subheadline)
@@ -60,14 +64,12 @@ struct TemplatePage: View {
 
 struct TemplatePage_Previews: PreviewProvider {
     static var previews: some View {
-        TemplatePage(template: Template(
-            id: 1, // Provide a unique ID
-            name: "Swift UI Starter",
-            description: "A comprehensive starter template for SwiftUI projects with basic MVVM structure.",
-            author: "John Doe",
-            type: "iOS App",
-            url: "https://github.com/example/swiftui-starter", // Provide a sample URL
-            createdDate: Date()
-        ))
+        TemplatePage(template: Template(id: 1,
+                                        name: "Swift UI Starter",
+                                        description: "A comprehensive starter template for SwiftUI projects with basic MVVM structure.",
+                                        author: "John Doe",
+                                        type: "iOS App",
+                                        url: "https://example.com",
+                                        createdDate: "2024-10-27T12:55:48.000Z"))
     }
 }

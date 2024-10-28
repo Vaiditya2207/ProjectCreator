@@ -19,9 +19,9 @@ struct AuthPage: View {
             Spacer()
             VStack() {
                 if current == "login"{
-                    LoginComponent()
+                    LoginComponent(model: model)
                 }else{
-                    SignupComponent()
+                    SignupComponent(model: model)
                 }
                 HStack{
                     Button(current == "login" ? "Create an account? SignUp" : "Already a user? Login"){

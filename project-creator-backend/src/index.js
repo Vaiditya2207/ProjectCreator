@@ -27,7 +27,6 @@ app.get('/api/get-template-by-id/:id', getTemplateById);
 app.get('/api/increase-project-count/:id', increaseProjectCount);
 app.post('/api/auth/:type', auth);
 
-
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });

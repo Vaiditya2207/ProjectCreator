@@ -17,7 +17,7 @@ struct HomeView: View {
             case "ProfilePage":
                 ProfilePage(model: model)
             case "TemplateLibrary":
-                TemplateLibrary(model: model, viewModel: templateViewModel)
+                TemplateLibrary(/*model: model, viewModel: templateViewModel*/)
             case "PackageManager":
                 PackageManager(model: model)
             default:
