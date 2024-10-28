@@ -190,7 +190,7 @@ struct CreateTemplate: View {
                 return
             }
             
-            if httpResponse.statusCode == 200 {
+            if httpResponse.statusCode == 201 {
                 DispatchQueue.main.async {
                     showError = false
                     model.currentComponent = "HomePage"  // Navigate to the home page after success
