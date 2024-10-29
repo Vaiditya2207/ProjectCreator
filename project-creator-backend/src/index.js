@@ -10,6 +10,8 @@ import uploadLatestVersion from './routes/uploadLatestVersion.js';
 import auth from './routes/auth.js';
 
 import cors from 'cors';
+import downloadArchives from './routes/downloadArchives.js';
+import downloadSpecificVersion from './routes/downloadSpecificVersion.js';
 
 
 dotenv.config();
@@ -31,6 +33,8 @@ app.get('/api/increase-project-count/:id', increaseProjectCount);
 app.post('/api/auth/:type', auth);
 app.get('/api/download/latest', downloadLatestVersion);
 app.post('/api/upload', upload.single('file'), uploadLatestVersion);
+app.get('/api/download/archives', downloadArchives);
+app.get('/api/download-version/:filename', downloadSpecificVersion);
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
