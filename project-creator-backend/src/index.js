@@ -6,20 +6,18 @@ import getAllTemplates from './routes/getAllTemplates.js';
 import getTemplateById from './routes/getTemplateById.js';
 import increaseProjectCount from './routes/increaseProjectCount.js';
 import downloadLatestVersion from './routes/downloadLatestVersion.js';
-import uploadLatestVersion from './routes/uploadLatestVersion.js';
+import { uploadLatestVersion, uploadABC } from './routes/uploadLatestVersion.js';
 import auth from './routes/auth.js';
-import makeUserAdmin from './routes/makeUserAdmin.js'
+import makeUserAdmin from './routes/makeUserAdmin.js';
 import removeAdminAccess from './routes/removeAdminAccess.js';
 
 import cors from 'cors';
 import downloadArchives from './routes/downloadArchives.js';
 import downloadSpecificVersion from './routes/downloadSpecificVersion.js';
 
-
 dotenv.config();
 const port = process.env.SERVER_PORT || 3000;
 const app = express();
-
 
 app.use(express.json());
 app.use(cors());
@@ -34,7 +32,7 @@ app.get('/api/get-template-by-id/:id', getTemplateById);
 app.get('/api/increase-project-count/:id', increaseProjectCount);
 app.post('/api/auth/:type', auth);
 app.get('/api/download/latest', downloadLatestVersion);
-app.post('/api/upload', upload.single('file'), uploadLatestVersion);
+app.post('/api/upload', uploadABC.single('file'), uploadLatestVersion);
 app.get('/api/download/archives', downloadArchives);
 app.get('/api/download-version/:filename', downloadSpecificVersion);
 app.get('/api/modify-access/admin/:userId', makeUserAdmin);

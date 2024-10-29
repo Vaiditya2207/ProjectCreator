@@ -9,6 +9,11 @@ const __dirname = path.dirname(__filename);
 
 const versionsDir = path.join(__dirname, '../versions');
 
+// Ensure the versions directory exists
+if (!fs.existsSync(versionsDir)) {
+    fs.mkdirSync(versionsDir, { recursive: true });
+}
+
 // Configure multer to store uploaded files in the versions directory
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -19,7 +24,7 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage });
+const uploadABC = multer({ storage });
 
 const uploadLatestVersion = async (req, res) => {
     try {
@@ -36,4 +41,4 @@ const uploadLatestVersion = async (req, res) => {
     }
 };
 
-export default uploadLatestVersion;
+export { uploadLatestVersion, uploadABC };
