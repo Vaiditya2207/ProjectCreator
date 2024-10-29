@@ -123,7 +123,7 @@ struct SignupComponent: View {
                 return
             }
             
-            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+            if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 201 {
                 do {
                     if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
                        let token = json["token"] as? String {
@@ -135,7 +135,9 @@ struct SignupComponent: View {
                             if let user = model.decodeJWTAndCreateUser(from: token) {
                                 model.user = user
                             }
-                            
+                            if let isAdmin = json["isAdmin"] as? Bool {
+                                model.isAdmin = isAdmin
+                            }
                             model.checkAuthToken()
                             model.currentComponent = "HomePage"
                         }

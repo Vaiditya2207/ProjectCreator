@@ -131,6 +131,9 @@ struct LoginComponent: View {
                             if let user = model.decodeJWTAndCreateUser(from: token) {
                                 model.user = user
                             }
+                            if let isAdmin = json["isAdmin"] as? Bool {
+                                model.isAdmin = isAdmin
+                            }
                             model.checkAuthToken()
                             model.currentComponent = "HomePage"
                         }

@@ -16,6 +16,13 @@ class MainViewModel: ObservableObject {
         }
     }
     
+    @Published var isAdmin: Bool {
+        didSet {
+            UserDefaults.standard.set(isLoggedIn, forKey: "isAdmin")
+            print("Admin status changed to: \(isAdmin)")
+        }
+    }
+    
     private var userData: String {
         get {
             UserDefaults.standard.string(forKey: "user") ?? ""
@@ -48,7 +55,7 @@ class MainViewModel: ObservableObject {
         // Initialize with stored values, defaulting to "HomePage" and false if not set
         self.currentComponent = UserDefaults.standard.string(forKey: "currentComponent") ?? "HomePage"
         self.isLoggedIn = UserDefaults.standard.bool(forKey: "isLoggedIn")
-        
+        self.isAdmin = UserDefaults.standard.bool(forKey: "isLoggedIn")
         // Check for token and update isLoggedIn
         checkAuthToken()
     }
@@ -84,6 +91,7 @@ class MainViewModel: ObservableObject {
             // Clear token from Keychain and update state
             KeychainHelper.standard.delete(forKey: "authToken")
             isLoggedIn = false
+            isAdmin = false
             user = nil
             currentComponent = "AuthPage" // Redirect to AuthPage
         }

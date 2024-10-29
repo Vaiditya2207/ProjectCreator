@@ -167,7 +167,6 @@ struct TemplateLibrary: View {
                             viewModel.fetchTemplates()
                         }
                     }
-                    .padding()
                 } else {
                     // Search Bar
                     HStack {

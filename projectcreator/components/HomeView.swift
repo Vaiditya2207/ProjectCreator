@@ -20,6 +20,8 @@ struct HomeView: View {
                 TemplateLibrary(/*model: model, viewModel: templateViewModel*/)
             case "PackageManager":
                 PackageManager(model: model)
+            case "AdminPage":
+                AdminPage(model: model)
             default:
                 HomePage(model: model)
             }

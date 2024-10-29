@@ -73,7 +73,22 @@ struct SideBar: View {
                 .frame(maxWidth: 170, alignment: .leading)
                 .buttonStyle(PlainButtonStyle())
             }
-
+            
+            if model.isAdmin {
+                Button(action: {
+                    model.currentComponent="AdminPage"
+                }) {
+                    HStack(spacing: 5) {
+                        Image(systemName: "person.badge.key")
+                            .frame(width: 20)
+                        Text("Admin Access")
+                    }
+                    .padding(.horizontal, 5)
+                }
+                .frame(maxWidth: 170, alignment: .leading)
+                .buttonStyle(PlainButtonStyle())
+            }
+            
             Button(action: {
                 model.currentComponent = "AppSettings"
             }) {
