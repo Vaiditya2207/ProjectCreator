@@ -14,6 +14,7 @@ const auth = async (req, res) => {
             if (status.status == 200) {
                 res.status(200).json({
                     token: jwt.sign(status.payload, process.env.JWT_SECRET),
+                    isAdmin: status.payload.admin ? true : false,  
                     message: status.message
                 });
             } else if (status.status == 401) {
@@ -33,7 +34,8 @@ const auth = async (req, res) => {
             const status = await signupAuth(req.body.username, req.body.email, req.body.password);
             if (status.status == 201) {
                 res.status(201).json({
-                    token: jwt.sign({ username: req.body.username, email: req.body.email }, process.env.JWT_SECRET),
+                    token: jwt.sign({ username: req.body.username, email: req.body.email, admin: false }, process.env.JWT_SECRET),
+                    isAdmin: false,
                     message: status.message
                 });
             } else if (status.status == 400) {

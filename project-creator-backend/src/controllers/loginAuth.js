@@ -29,7 +29,8 @@ const loginAuth = async (identity, password) => {
                 message: "Login successful",
                 payload: {
                     username: result[0].username,
-                    email: result[0].email
+                    email: result[0].email,
+                    admin: result[0].admin
                 }
             }
         } else {

@@ -29,7 +29,14 @@ const signupAuth = async (username, email, password) => {
         }
 
         const [result] = await connection.query('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', [username, email, password]);
-        return { status: 201, message: 'User created successfully' };
+        return {
+            status: 201, message: 'User created successfully',
+            payload: {
+                    username: username,
+                    email: email,
+                    admin: false
+                }
+            };
     } catch (err) {
         console.error(err);
         return { status: 500, message: 'Internal Server Error' };

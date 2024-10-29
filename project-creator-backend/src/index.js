@@ -37,8 +37,8 @@ app.get('/api/download/latest', downloadLatestVersion);
 app.post('/api/upload', upload.single('file'), uploadLatestVersion);
 app.get('/api/download/archives', downloadArchives);
 app.get('/api/download-version/:filename', downloadSpecificVersion);
-app.get('/api/modify-access/admin/:userId', makeUserAdmin)
-app.get('/api/modify-access/remove-admin/:userId', removeAdminAccess)
+app.get('/api/modify-access/admin/:userId', makeUserAdmin);
+app.get('/api/modify-access/remove-admin/:userId', removeAdminAccess);
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
