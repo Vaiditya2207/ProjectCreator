@@ -5,7 +5,10 @@ import createTemplate from '../src/routes/createTemplate.js';
 import getAllTemplates from './routes/getAllTemplates.js';
 import getTemplateById from './routes/getTemplateById.js';
 import increaseProjectCount from './routes/increaseProjectCount.js';
+import downloadLatestVersion from './routes/downloadLatestVersion.js';
+import uploadLatestVersion from './routes/uploadLatestVersion.js';
 import auth from './routes/auth.js';
+
 import cors from 'cors';
 
 
@@ -26,6 +29,8 @@ app.get('/api/get-all-templates', getAllTemplates);
 app.get('/api/get-template-by-id/:id', getTemplateById);
 app.get('/api/increase-project-count/:id', increaseProjectCount);
 app.post('/api/auth/:type', auth);
+app.get('/api/download/latest', downloadLatestVersion);
+app.post('/api/upload', upload.single('file'), uploadLatestVersion);
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
