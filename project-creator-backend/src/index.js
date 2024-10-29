@@ -9,6 +9,7 @@ import downloadLatestVersion from './routes/downloadLatestVersion.js';
 import uploadLatestVersion from './routes/uploadLatestVersion.js';
 import auth from './routes/auth.js';
 import makeUserAdmin from './routes/makeUserAdmin.js'
+import removeAdminAccess from './routes/removeAdminAccess.js';
 
 import cors from 'cors';
 import downloadArchives from './routes/downloadArchives.js';
@@ -37,6 +38,7 @@ app.post('/api/upload', upload.single('file'), uploadLatestVersion);
 app.get('/api/download/archives', downloadArchives);
 app.get('/api/download-version/:filename', downloadSpecificVersion);
 app.get('/api/modify-access/admin/:userId', makeUserAdmin)
+app.get('/api/modify-access/remove-admin/:userId', removeAdminAccess)
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);

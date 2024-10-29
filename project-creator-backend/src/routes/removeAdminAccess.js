@@ -1,4 +1,6 @@
 import pool from '../db/config.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const removeAdminAccess = async (req, res) => {
     const userId = req.params.userId;
