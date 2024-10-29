@@ -8,6 +8,7 @@ import increaseProjectCount from './routes/increaseProjectCount.js';
 import downloadLatestVersion from './routes/downloadLatestVersion.js';
 import uploadLatestVersion from './routes/uploadLatestVersion.js';
 import auth from './routes/auth.js';
+import makeUserAdmin from './routes/makeUserAdmin.js'
 
 import cors from 'cors';
 import downloadArchives from './routes/downloadArchives.js';
@@ -35,6 +36,7 @@ app.get('/api/download/latest', downloadLatestVersion);
 app.post('/api/upload', upload.single('file'), uploadLatestVersion);
 app.get('/api/download/archives', downloadArchives);
 app.get('/api/download-version/:filename', downloadSpecificVersion);
+app.get('/api/modify-access/admin/:userId', makeUserAdmin)
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
