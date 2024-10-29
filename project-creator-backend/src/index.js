@@ -22,6 +22,16 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+const checkAuth = (req, res, next) => {
+    if (!req.headers.authorization) {
+        return res.status(401).send('Unauthorized');
+    }
+    if (req.headers.authorization !== process.env.AUTH_KEY) { 
+        return res.status(401).send('Unauthorized');
+    }
+    next();
+}
+
 // Configure multer for file uploads
 const upload = multer({ dest: 'uploads/' }); // Temporary upload folder
 
@@ -32,7 +42,7 @@ app.get('/api/get-template-by-id/:id', getTemplateById);
 app.get('/api/increase-project-count/:id', increaseProjectCount);
 app.post('/api/auth/:type', auth);
 app.get('/api/download/latest', downloadLatestVersion);
-app.post('/api/upload', uploadABC.single('file'), uploadLatestVersion);
+app.post('/api/upload', checkAuth, uploadABC.single('file'), uploadLatestVersion);
 app.get('/api/download/archives', downloadArchives);
 app.get('/api/download-version/:filename', downloadSpecificVersion);
 app.get('/api/modify-access/admin/:userId', makeUserAdmin);
