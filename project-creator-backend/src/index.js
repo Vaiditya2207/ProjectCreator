@@ -10,6 +10,7 @@ import { uploadLatestVersion, uploadABC } from './routes/uploadLatestVersion.js'
 import auth from './routes/auth.js';
 import makeUserAdmin from './routes/makeUserAdmin.js';
 import removeAdminAccess from './routes/removeAdminAccess.js';
+import updateSwiftVersions from './controllers/updateSwiftVersions.js';
 
 import cors from 'cors';
 import downloadArchives from './routes/downloadArchives.js';
@@ -47,7 +48,29 @@ app.get('/api/download/archives', downloadArchives);
 app.get('/api/download-version/:filename', downloadSpecificVersion);
 app.get('/api/modify-access/admin/:userId', makeUserAdmin);
 app.get('/api/modify-access/remove-admin/:userId', removeAdminAccess);
+app.get('/api/refresh-swift-versions', async (req, res) => {
+    const status = await updateSwiftVersions()
+    if (status) {
+        return res.status(200).json({
+            message: "Updated Versions SuccessFully"
+        })
+    }
+    else {
+        return res.status(500).json({
+            error: "Internal Server Error",
+            message: "Internal Server Error"
+        })
+    }
+});
 
-app.listen(port, () => {
+app.listen(port, async () => {
+    console.log("Checking For newer versions");
+    const status = await updateSwiftVersions();
+    if (status) {
+        console.log("Updated Versions SuccessFully")
+    }
+    else {
+        console.log("Internal Server Error")
+    }
     console.log(`Server running on port ${port}`);
 });
