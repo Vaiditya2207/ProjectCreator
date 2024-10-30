@@ -48,7 +48,7 @@ app.get('/api/download/archives', downloadArchives);
 app.get('/api/download-version/:filename', downloadSpecificVersion);
 app.get('/api/modify-access/admin/:userId', makeUserAdmin);
 app.get('/api/modify-access/remove-admin/:userId', removeAdminAccess);
-app.get('/api/refresh-swift-versions', async (req, res) => {
+app.post('/api/refresh-swift-versions', async (req, res) => {
     const status = await updateSwiftVersions()
     if (status) {
         return res.status(200).json({
