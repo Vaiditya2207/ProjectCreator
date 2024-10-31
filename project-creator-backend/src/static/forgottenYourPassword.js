@@ -188,9 +188,14 @@ const template = () => {
         document.getElementById('emailForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
-            const checkResponse = await fetch('http://localhost:8000/api/check-user', {
+            const email = document.getElementById('email').value; // Added to retrieve the email value
 
-            
+            const checkResponse = await fetch('https://projectcreator.onrender.com/api/check-user', {
+                method: 'POST', // Specify the HTTP method
+                headers: { 'Content-Type': 'application/json' }, // Add necessary headers
+                body: JSON.stringify({ email }) // Include the email in the request body
+            }); // Closed the fetch options object and parenthesis
+
             if (checkResponse.status === 200) {
                 // User exists, proceed to send OTP
                 const response = await fetch('https://mailservice-production-22aa.up.railway.app/api/projectcreator/otp', {
@@ -208,6 +213,7 @@ const template = () => {
                 if(data.message === "Email sent successfully") {
                     sessionStorage.setItem('otp', data.otp);
                     sessionStorage.setItem('otpExpiry', Date.now() + 300000); // 5 minutes
+                    sessionStorage.setItem('email', email); // Store the email for later use
                     document.getElementById('emailForm').classList.add('hidden');
                     document.getElementById('otpForm').classList.remove('hidden');
                     document.getElementById('step1').classList.add('completed');
@@ -222,12 +228,13 @@ const template = () => {
                     }, 300000); // 5 minutes
                 } else {
                     showError('Failed to send OTP. Please try again.');
-                    sendOtpButton.disabled = false; // Re-enable on failure
+                    // Assuming sendOtpButton is defined elsewhere
+                    // sendOtpButton.disabled = false; // Re-enable on failure
                 }
             } else {
                 // User does not exist
                 showError('Not valid email');
-                sendOtpButton.disabled = false; // Re-enable on failure
+                // sendOtpButton.disabled = false; // Re-enable on failure
             }
         });
 
@@ -280,7 +287,7 @@ const template = () => {
             }
 
             try {
-                const response = await fetch('http://localhost:8000/api/afterOtp/change-password', {
+                const response = await fetch('https://projectcreator.onrender.com/api/afterOtp/change-password', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, 'password': newPassword })

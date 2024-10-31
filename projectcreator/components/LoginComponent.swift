@@ -1,9 +1,3 @@
-//
-//  LoginComponent.swift
-//  projectcreator
-//
-//  Created by Vaiditya Tanwar on 21/10/24.
-
 import SwiftUI
 import Foundation
 
@@ -73,7 +67,7 @@ struct LoginComponent: View {
             
             HStack {
                 Button("Forgotten your password?") {
-                    
+                    openPasswordReset()
                 }
                 .buttonStyle(PlainButtonStyle())
             }
@@ -156,5 +150,11 @@ struct LoginComponent: View {
                 }
             }
         }.resume()
+    }
+    
+    private func openPasswordReset() {
+        if let url = URL(string: "https://projectcreator.onrender.com/reset-your-password") {
+            NSWorkspace.shared.open(url)
+        }
     }
 }
