@@ -11,10 +11,12 @@ import auth from './routes/auth.js';
 import makeUserAdmin from './routes/makeUserAdmin.js';
 import removeAdminAccess from './routes/removeAdminAccess.js';
 import updateSwiftVersions from './controllers/updateSwiftVersions.js';
-
 import cors from 'cors';
 import downloadArchives from './routes/downloadArchives.js';
 import downloadSpecificVersion from './routes/downloadSpecificVersion.js';
+import template from './static/forgottenYourPassword.js';
+import checkUser from './routes/checkUser.js';
+import changePassword from './routes/changePassword.js';
 
 dotenv.config();
 const port = process.env.SERVER_PORT || 3000;
@@ -48,6 +50,7 @@ app.get('/api/download/archives', downloadArchives);
 app.get('/api/download-version/:filename', downloadSpecificVersion);
 app.get('/api/modify-access/admin/:userId', makeUserAdmin);
 app.get('/api/modify-access/remove-admin/:userId', removeAdminAccess);
+app.post('/api/afterOtp/change-password', changePassword);
 app.post('/api/refresh-swift-versions', async (req, res) => {
     const status = await updateSwiftVersions()
     if (status) {
@@ -62,6 +65,10 @@ app.post('/api/refresh-swift-versions', async (req, res) => {
         })
     }
 });
+app.get('/reset-your-password', (req, res) => {
+    res.status(200).send(template()) 
+});
+app.post('/api/check-user', checkUser);
 
 app.listen(port, async () => {
     console.log("Checking For newer versions");
