@@ -5,12 +5,15 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config();
 
+
 const auth = async (req, res) => {
     const connection = await pool.getConnection();
     const type = req.params.type;
     try {
+        const location = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+        const device = req.headers['user-agent'];
         if (type == "login") {
-            const status = await loginAuth(req.body.identity, req.body.password);
+            const status = await loginAuth(req.body.identity, req.body.password, location, device);
             if (status.status == 200) {
                 res.status(200).json({
                     token: jwt.sign(status.payload, process.env.JWT_SECRET),

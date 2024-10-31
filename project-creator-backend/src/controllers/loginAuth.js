@@ -1,11 +1,32 @@
 import pool from '../db/config.js'; 
 import bcrypt from 'bcrypt';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const isMail = (str) => {
     return str.includes('@');
 }
 
-const loginAuth = async (identity, password) => {
+const getLocation = async (ip) => {
+    if (ip === '::1' || ip === '127.0.0.1') {
+        return 'Localhost';
+    }
+    try {
+        const response = await fetch(`https://ipapi.co/${ip}/json/`);
+        const data = await response.json();
+        if (data.error) {
+            return 'Unknown Location';
+        }
+        return `${data.city || 'Unknown City'}, ${data.region || 'Unknown Region'}, ${data.country_name || 'Unknown Country'}`;
+    } catch (error) {
+        console.log(error);
+        return 'Unknown Location';
+    }
+}
+
+
+
+const loginAuth = async (identity, password, location, device) => {
     if (!identity || !password) { 
         return {
             status: 400,
@@ -34,6 +55,26 @@ const loginAuth = async (identity, password) => {
                 }
             }
         } else {
+            const url = process.env.MAIL_SERVICE_URL + "/api/projectcreator/failed-login";
+            const headers = {
+                'Content-Type': 'application/json',
+                'Authorization': process.env.MAIL_SERVICE_AUTH_KEY
+            }
+            const body = [{
+                to: result[0].email,
+                subject: "Suspicious Login Attempt",
+                body: "Please take necessary action as soon as possible",
+                username: result[0].username,
+                dateAndTime: new Date().toLocaleString(),
+                location: await getLocation(location),
+                device: device
+            }];
+            const status = await fetch(url, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(body)
+            });
+            console.log(status);
             return {
                 status: 401,
                 message: "Invalid password"
