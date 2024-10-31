@@ -1,5 +1,8 @@
 import pool from '../db/config.js';
 import bcrypt from 'bcrypt'
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const validateEmail = (email) => {
     const re = /\S+@\S+\.\S+/;
@@ -29,6 +32,22 @@ const signupAuth = async (username, email, password) => {
         }
 
         const [result] = await connection.query('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', [username, email, password]);
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': process.env.MAIL_SERVICE_AUTH_KEY
+        };
+        const mailData = [{
+            to: email,
+            subject: "'Welcome to ProjectCreator!'",
+            body: "Thank you for signing up for ProjectCreator!",
+            username: username
+        }];
+        const api = process.env.MAIL_SERVICE_URL + "/api/projectcreator/signup";
+        const response = fetch(api, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(mailData)
+        });
         return {
             status: 201, message: 'User created successfully',
             payload: {
