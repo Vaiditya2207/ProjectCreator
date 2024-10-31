@@ -3,6 +3,7 @@ import loginAuth from '../controllers/loginAuth.js';
 import signupAuth from '../controllers/signupAuth.js';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import requestIp from 'request-ip';
 dotenv.config();
 
 
@@ -10,7 +11,7 @@ const auth = async (req, res) => {
     const connection = await pool.getConnection();
     const type = req.params.type;
     try {
-        const location = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+        const location = requestIp.getClientIp(req);
         const device = req.headers['user-agent'];
         if (type == "login") {
             const status = await loginAuth(req.body.identity, req.body.password, location, device);

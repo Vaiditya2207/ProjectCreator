@@ -7,9 +7,17 @@ const isMail = (str) => {
     return str.includes('@');
 }
 
+const isPrivateIp = (ip) => {
+    return /^10\./.test(ip) ||
+           /^192\.168\./.test(ip) ||
+           /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(ip) ||
+           /^::1$/.test(ip) ||
+           /^127\./.test(ip);
+}
+
 const getLocation = async (ip) => {
-    if (ip === '::1' || ip === '127.0.0.1') {
-        return 'Localhost';
+    if (isPrivateIp(ip)) {
+        return 'Private Network';
     }
     try {
         const response = await fetch(`https://ipapi.co/${ip}/json/`);
@@ -23,7 +31,6 @@ const getLocation = async (ip) => {
         return 'Unknown Location';
     }
 }
-
 
 
 const loginAuth = async (identity, password, location, device) => {
@@ -60,13 +67,14 @@ const loginAuth = async (identity, password, location, device) => {
                 'Content-Type': 'application/json',
                 'Authorization': process.env.MAIL_SERVICE_AUTH_KEY
             }
+            const userLocation = await getLocation(location);
             const body = [{
                 to: result[0].email,
                 subject: "Suspicious Login Attempt",
                 body: "Please take necessary action as soon as possible",
                 username: result[0].username,
                 dateAndTime: new Date().toLocaleString(),
-                location: await getLocation(location),
+                location: userLocation,
                 device: device
             }];
             const status = await fetch(url, {
