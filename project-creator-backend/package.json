@@ -28,6 +28,7 @@
     "octokit": "^4.0.2",
     "path": "^0.12.7",
     "request-ip": "^3.3.0",
-    "simple-git": "^3.27.0"
+    "simple-git": "^3.27.0",
+    "uuid": "^11.0.2"
   }
 }
