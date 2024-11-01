@@ -23,6 +23,7 @@ const getLocation = async (ip) => {
         const response = await fetch(`https://ipapi.co/${ip}/json/`);
         const data = await response.json();
         if (data.error) {
+            console.log(error)
             return 'Unknown Location';
         }
         return `${data.city || 'Unknown City'}, ${data.region || 'Unknown Region'}, ${data.country_name || 'Unknown Country'}`;
@@ -73,7 +74,7 @@ const loginAuth = async (identity, password, location, device) => {
                 subject: "Suspicious Login Attempt",
                 body: "Please take necessary action as soon as possible",
                 username: result[0].username,
-                dateAndTime: new Date().toLocaleString(),
+                dateTime: new Date().toLocaleString(),
                 location: userLocation,
                 device: device
             }];
