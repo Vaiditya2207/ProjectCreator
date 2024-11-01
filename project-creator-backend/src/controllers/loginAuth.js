@@ -24,12 +24,12 @@ const getLocation = async (ip) => {
         const data = await response.json();
         if (data.error) {
             console.log(data.error)
-            return 'Unknown Location';
+            return 'Failed to fetch Location';
         }
         return `${data.city || 'Unknown City'}, ${data.region || 'Unknown Region'}, ${data.country_name || 'Unknown Country'}`;
     } catch (error) {
         console.log(error);
-        return 'Unknown Location';
+        return 'Failed to fetch Location';
     }
 }
 
@@ -73,7 +73,7 @@ const loginAuth = async (identity, password, location, device) => {
                 to: result[0].email,
                 subject: "Suspicious Login Attempt",
                 body: "Please take necessary action as soon as possible",
-                username: result[0].username,
+                userName: result[0].username,
                 dateTime: new Date().toLocaleString(),
                 location: userLocation,
                 device: device
