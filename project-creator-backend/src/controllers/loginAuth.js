@@ -23,7 +23,7 @@ const getLocation = async (ip) => {
         const response = await fetch(`https://ipapi.co/${ip}/json/`);
         const data = await response.json();
         if (data.error) {
-            console.log(error)
+            console.log(data.error)
             return 'Unknown Location';
         }
         return `${data.city || 'Unknown City'}, ${data.region || 'Unknown Region'}, ${data.country_name || 'Unknown Country'}`;
@@ -83,7 +83,6 @@ const loginAuth = async (identity, password, location, device) => {
                 headers: headers,
                 body: JSON.stringify(body)
             });
-            console.log(status);
             return {
                 status: 401,
                 message: "Invalid password"
