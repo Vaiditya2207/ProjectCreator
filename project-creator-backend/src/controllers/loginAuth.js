@@ -15,15 +15,29 @@ const isPrivateIp = (ip) => {
            /^127\./.test(ip);
 }
 
+const fetchWithRetry = async (url, options, retries = 3, timeout = 5000) => {
+    for (let i = 0; i < retries; i++) {
+        try {
+            const controller = new AbortController();
+            const id = setTimeout(() => controller.abort(), timeout);
+            const response = await fetch(url, { ...options, signal: controller.signal });
+            clearTimeout(id);
+            if (!response.ok) throw new Error('Network response was not ok');
+            return await response.json();
+        } catch (error) {
+            if (i === retries - 1) throw error;
+        }
+    }
+}
+
 const getLocation = async (ip) => {
     if (isPrivateIp(ip)) {
         return 'Private Network';
     }
     try {
-        const response = await fetch(`https://ipapi.co/${ip}/json/`);
-        const data = await response.json();
+        const data = await fetchWithRetry(`https://ipapi.co/${ip}/json/`);
         if (data.error) {
-            console.log(data.error)
+            console.log(data);
             return 'Failed to fetch Location';
         }
         return `${data.city || 'Unknown City'}, ${data.region || 'Unknown Region'}, ${data.country_name || 'Unknown Country'}`;
@@ -32,7 +46,6 @@ const getLocation = async (ip) => {
         return 'Failed to fetch Location';
     }
 }
-
 
 const loginAuth = async (identity, password, location, device) => {
     if (!identity || !password) { 
