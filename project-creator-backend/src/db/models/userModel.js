@@ -7,6 +7,7 @@ const model = async () => {
         username VARCHAR(255) NOT NULL,
         email VARCHAR(255) NOT NULL,
         password VARCHAR(255) NOT NULL,
+        isVerified BOOLEAN DEFAULT FALSE,
         admin BOOLEAN DEFAULT FALSE
     )`
 

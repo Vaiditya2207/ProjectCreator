@@ -17,6 +17,7 @@ import downloadSpecificVersion from './routes/downloadSpecificVersion.js';
 import template from './static/forgottenYourPassword.js';
 import checkUser from './routes/checkUser.js';
 import changePassword from './routes/changePassword.js';
+import verifyAUser from './routes/verifyAccountPage.js';
 import sendVerificationMail from './routes/sendVerificationMail.js';
 
 dotenv.config();
@@ -71,7 +72,7 @@ app.get('/reset-your-password', (req, res) => {
 });
 app.post('/api/check-user', checkUser);
 app.post('/api/send-verification-mail', sendVerificationMail);
-// app.get('/api/verify-account', verifyAUser);
+app.get('/verify-account', verifyAUser);
 
 app.listen(port, async () => {
     console.log("Checking For newer versions");

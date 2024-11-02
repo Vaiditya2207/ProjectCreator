@@ -48,6 +48,15 @@ const signupAuth = async (username, email, password) => {
             headers: headers,
             body: JSON.stringify(mailData)
         });
+
+        const verificationMail = fetch("https://projectcreator.onrender.com" + "/api/send-verification-mail", {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify({
+                email: email
+            })
+        });
+        
         return {
             status: 201, message: 'User created successfully',
             payload: {
